@@ -1,13 +1,15 @@
-package list
+package list_test
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	list "github.com/slonegd-otus-go/06_list"
 )
 
 func TestList_PushBack(t *testing.T) {
-	var list List
+	var list list.List
 
 	tests := []struct {
 		name  string
@@ -28,7 +30,7 @@ func TestList_PushBack(t *testing.T) {
 }
 
 func TestList_PushFront(t *testing.T) {
-	var list List
+	var list list.List
 
 	tests := []struct {
 		name  string
