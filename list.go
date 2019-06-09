@@ -35,7 +35,17 @@ func (list *List) PushBack(v interface{}) {
 }
 
 func (list *List) PushFront(v interface{}) {
-
+	if list.first == nil {
+		list.first = &Node{Value: v}
+		list.last = list.first
+		return
+	}
+	node := &Node{
+		Value: v,
+		next:  list.first,
+	}
+	list.first.prev = node
+	list.first = node
 }
 
 func (list *List) PopBack() *Node {
