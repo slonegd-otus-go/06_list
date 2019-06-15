@@ -5,17 +5,17 @@ import (
 	"strings"
 )
 
-type List struct {
+type Type struct {
 	first *item
 	last  *item
 	len   int
 }
 
-func (list List) Len() int {
+func (list Type) Len() int {
 	return list.len
 }
 
-func (list *List) PushBack(v interface{}) {
+func (list *Type) PushBack(v interface{}) {
 	list.len++
 
 	if list.last == nil {
@@ -31,7 +31,7 @@ func (list *List) PushBack(v interface{}) {
 	list.last = item
 }
 
-func (list *List) PushFront(v interface{}) {
+func (list *Type) PushFront(v interface{}) {
 	list.len++
 
 	if list.first == nil {
@@ -47,35 +47,15 @@ func (list *List) PushFront(v interface{}) {
 	list.first = item
 }
 
-func (list *List) PopBack() *item {
-	return nil
+func (list Type) First() *item {
+	return list.first
 }
 
-func (list *List) PopFront() *item {
-	return nil
+func (list Type) Last() *item {
+	return list.last
 }
 
-func (list *List) Back() *item {
-	return nil
-}
-
-func (list *List) Front() *item {
-	return nil
-}
-
-func (list *List) Foreach(f func(*item)) {
-
-}
-
-func (list *List) FindIf(f func(*item) bool) *item {
-	return nil
-}
-
-func (list *List) Remove(item *item) {
-
-}
-
-func (list *List) String() string {
+func (list *Type) String() string {
 	var builder strings.Builder
 	builder.WriteRune('[')
 	item := list.first
