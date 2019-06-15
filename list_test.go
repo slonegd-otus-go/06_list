@@ -16,9 +16,9 @@ func TestList_PushBack(t *testing.T) {
 		value interface{}
 		want  string
 	}{
-		{"1", 1, "1 "},
-		{"2.5", 2.5, "1 2.5 "},
-		{"text", "text", "1 2.5 text "},
+		{"1", 1, "[1]"},
+		{"2.5", 2.5, "[1 2.5]"},
+		{"text", "text", "[1 2.5 text]"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -37,9 +37,9 @@ func TestList_PushFront(t *testing.T) {
 		value interface{}
 		want  string
 	}{
-		{"1", 1, "1 "},
-		{"2.5", 2.5, "2.5 1 "},
-		{"text", "text", "text 2.5 1 "},
+		{"1", 1, "[1]"},
+		{"2.5", 2.5, "[2.5 1]"},
+		{"text", "text", "[text 2.5 1]"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

@@ -78,10 +78,16 @@ func (list *List) Remove(node *Node) {
 
 func (list *List) String() string {
 	var builder strings.Builder
-	for node := list.first; node != nil; node = node.Next() {
+	builder.WriteRune('[')
+	node := list.first
+	for ; node.Next() != nil; node = node.Next() {
 		builder.WriteString(
 			fmt.Sprintf("%v ", node.Value),
 		)
 	}
+	builder.WriteString(
+		fmt.Sprintf("%v", node.Value),
+	)
+	builder.WriteRune(']')
 	return builder.String()
 }
