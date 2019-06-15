@@ -76,6 +76,15 @@ func TestList_Len(t *testing.T) {
 			},
 			want: 2,
 		},
+		{
+			name: "push back and push front and remove",
+			action: func(list *list.Type) {
+				list.PushBack(100)
+				list.PushBack(200)
+				list.First().Remove()
+			},
+			want: 1,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -273,6 +282,89 @@ func TestItem_Prev(t *testing.T) {
 				return
 			}
 			assert.Equal(t, tt.wantValue, got.Value)
+		})
+	}
+}
+
+func TestItem_Remove(t *testing.T) {
+	tests := []struct {
+		name         string
+		makeList     func() *list.Type
+		removeAction func(*list.Type)
+		wantBefore   string
+		wantAfter    string
+	}{
+		{
+			name: "remove first",
+			makeList: func() *list.Type {
+				list := &list.Type{}
+				list.PushBack(1)
+				list.PushBack(2)
+				list.PushBack(3)
+				list.PushBack(4)
+				return list
+			},
+			removeAction: func(list *list.Type) {
+				list.First().Remove()
+			},
+			wantBefore: "[1 2 3 4]",
+			wantAfter:  "[2 3 4]",
+		},
+		{
+			name: "remove last",
+			makeList: func() *list.Type {
+				list := &list.Type{}
+				list.PushBack(1)
+				list.PushBack(2)
+				list.PushBack(3)
+				list.PushBack(4)
+				return list
+			},
+			removeAction: func(list *list.Type) {
+				list.Last().Remove()
+			},
+			wantBefore: "[1 2 3 4]",
+			wantAfter:  "[1 2 3]",
+		},
+		{
+			name: "remove second",
+			makeList: func() *list.Type {
+				list := &list.Type{}
+				list.PushBack(1)
+				list.PushBack(2)
+				list.PushBack(3)
+				list.PushBack(4)
+				return list
+			},
+			removeAction: func(list *list.Type) {
+				list.First().Next().Remove()
+			},
+			wantBefore: "[1 2 3 4]",
+			wantAfter:  "[1 3 4]",
+		},
+		{
+			name: "remove prelast",
+			makeList: func() *list.Type {
+				list := &list.Type{}
+				list.PushBack(1)
+				list.PushBack(2)
+				list.PushBack(3)
+				list.PushBack(4)
+				return list
+			},
+			removeAction: func(list *list.Type) {
+				list.Last().Prev().Remove()
+			},
+			wantBefore: "[1 2 3 4]",
+			wantAfter:  "[1 2 4]",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			list := tt.makeList()
+			assert.Equal(t, tt.wantBefore, list.String())
+			tt.removeAction(list)
+			assert.Equal(t, tt.wantAfter, list.String())
 		})
 	}
 }
