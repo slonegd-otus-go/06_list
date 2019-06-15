@@ -80,3 +80,7 @@ type item struct {
 func (item item) Next() *item {
 	return item.next
 }
+
+func (item item) Prev() *item {
+	return item.prev
+}

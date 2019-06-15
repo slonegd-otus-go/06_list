@@ -184,3 +184,95 @@ func TestList_Last(t *testing.T) {
 		})
 	}
 }
+
+func TestItem_Next(t *testing.T) {
+	tests := []struct {
+		name      string
+		action    func(*list.Type)
+		wantValue interface{}
+	}{
+		{
+			name: "len 1: list.First().Next()",
+			action: func(list *list.Type) {
+				list.PushBack(100)
+			},
+			wantValue: nil,
+		},
+		{
+			name: "len 2: list.First().Next()",
+			action: func(list *list.Type) {
+				list.PushBack(100)
+				list.PushBack(200)
+			},
+			wantValue: 200,
+		},
+		{
+			name: "len >2: list.First().Next()",
+			action: func(list *list.Type) {
+				list.PushBack(300)
+				list.PushBack(400)
+				list.PushBack(500)
+				list.PushBack(600)
+			},
+			wantValue: 400,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var list list.Type
+			tt.action(&list)
+			got := list.First().Next()
+			if tt.wantValue == nil {
+				assert.Nil(t, got)
+				return
+			}
+			assert.Equal(t, tt.wantValue, got.Value)
+		})
+	}
+}
+
+func TestItem_Prev(t *testing.T) {
+	tests := []struct {
+		name      string
+		action    func(*list.Type)
+		wantValue interface{}
+	}{
+		{
+			name: "len 1: list.Last().Prev()",
+			action: func(list *list.Type) {
+				list.PushBack(100)
+			},
+			wantValue: nil,
+		},
+		{
+			name: "len 2: list.Last().Prev()",
+			action: func(list *list.Type) {
+				list.PushBack(100)
+				list.PushBack(200)
+			},
+			wantValue: 100,
+		},
+		{
+			name: "len >2: list.Last().Prev()",
+			action: func(list *list.Type) {
+				list.PushBack(600)
+				list.PushBack(700)
+				list.PushBack(800)
+				list.PushBack(900)
+			},
+			wantValue: 800,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var list list.Type
+			tt.action(&list)
+			got := list.Last().Prev()
+			if tt.wantValue == nil {
+				assert.Nil(t, got)
+				return
+			}
+			assert.Equal(t, tt.wantValue, got.Value)
+		})
+	}
+}
