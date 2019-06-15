@@ -49,3 +49,40 @@ func TestList_PushFront(t *testing.T) {
 		})
 	}
 }
+
+func TestList_Len(t *testing.T) {
+	tests := []struct {
+		name   string
+		action func(*list.List)
+		want   int
+	}{
+		{
+			name:   "empty",
+			action: func(*list.List) {},
+			want:   0,
+		},
+		{
+			name: "add 1",
+			action: func(list *list.List) {
+				list.PushBack(100)
+			},
+			want: 1,
+		},
+		{
+			name: "push back and push front",
+			action: func(list *list.List) {
+				list.PushBack(100)
+				list.PushBack(200)
+			},
+			want: 2,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var list list.List
+			tt.action(&list)
+			got := list.Len()
+			assert.Equal(t, tt.want, got)
+		})
+	}
+}

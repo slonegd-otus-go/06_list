@@ -5,22 +5,19 @@ import (
 	"strings"
 )
 
-type item struct {
-	Value interface{}
-	prev  *item
-	next  *item
-}
-
-func (item item) Next() *item {
-	return item.next
-}
-
 type List struct {
 	first *item
 	last  *item
+	len   int
+}
+
+func (list List) Len() int {
+	return list.len
 }
 
 func (list *List) PushBack(v interface{}) {
+	list.len++
+
 	if list.last == nil {
 		list.last = &item{Value: v}
 		list.first = list.last
@@ -35,6 +32,8 @@ func (list *List) PushBack(v interface{}) {
 }
 
 func (list *List) PushFront(v interface{}) {
+	list.len++
+
 	if list.first == nil {
 		list.first = &item{Value: v}
 		list.last = list.first
@@ -90,4 +89,14 @@ func (list *List) String() string {
 	)
 	builder.WriteRune(']')
 	return builder.String()
+}
+
+type item struct {
+	Value interface{}
+	prev  *item
+	next  *item
+}
+
+func (item item) Next() *item {
+	return item.next
 }
