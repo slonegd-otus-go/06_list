@@ -5,88 +5,88 @@ import (
 	"strings"
 )
 
-type Node struct {
+type item struct {
 	Value interface{}
-	prev  *Node
-	next  *Node
+	prev  *item
+	next  *item
 }
 
-func (node Node) Next() *Node {
-	return node.next
+func (item item) Next() *item {
+	return item.next
 }
 
 type List struct {
-	first *Node
-	last  *Node
+	first *item
+	last  *item
 }
 
 func (list *List) PushBack(v interface{}) {
 	if list.last == nil {
-		list.last = &Node{Value: v}
+		list.last = &item{Value: v}
 		list.first = list.last
 		return
 	}
-	node := &Node{
+	item := &item{
 		Value: v,
 		prev:  list.last,
 	}
-	list.last.next = node
-	list.last = node
+	list.last.next = item
+	list.last = item
 }
 
 func (list *List) PushFront(v interface{}) {
 	if list.first == nil {
-		list.first = &Node{Value: v}
+		list.first = &item{Value: v}
 		list.last = list.first
 		return
 	}
-	node := &Node{
+	item := &item{
 		Value: v,
 		next:  list.first,
 	}
-	list.first.prev = node
-	list.first = node
+	list.first.prev = item
+	list.first = item
 }
 
-func (list *List) PopBack() *Node {
+func (list *List) PopBack() *item {
 	return nil
 }
 
-func (list *List) PopFront() *Node {
+func (list *List) PopFront() *item {
 	return nil
 }
 
-func (list *List) Back() *Node {
+func (list *List) Back() *item {
 	return nil
 }
 
-func (list *List) Front() *Node {
+func (list *List) Front() *item {
 	return nil
 }
 
-func (list *List) Foreach(f func(*Node)) {
+func (list *List) Foreach(f func(*item)) {
 
 }
 
-func (list *List) FindIf(f func(*Node) bool) *Node {
+func (list *List) FindIf(f func(*item) bool) *item {
 	return nil
 }
 
-func (list *List) Remove(node *Node) {
+func (list *List) Remove(item *item) {
 
 }
 
 func (list *List) String() string {
 	var builder strings.Builder
 	builder.WriteRune('[')
-	node := list.first
-	for ; node.Next() != nil; node = node.Next() {
+	item := list.first
+	for ; item.Next() != nil; item = item.Next() {
 		builder.WriteString(
-			fmt.Sprintf("%v ", node.Value),
+			fmt.Sprintf("%v ", item.Value),
 		)
 	}
 	builder.WriteString(
-		fmt.Sprintf("%v", node.Value),
+		fmt.Sprintf("%v", item.Value),
 	)
 	builder.WriteRune(']')
 	return builder.String()
