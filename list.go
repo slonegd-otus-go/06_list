@@ -58,7 +58,7 @@ func (list Type) Last() *item {
 }
 
 func (list *Type) RemoveIf(predicate func(value interface{}) bool) {
-	for item := list.first; item.next != nil; item = item.next {
+	for item := list.first; item != nil; item = item.next {
 		if predicate(item.Value) {
 			item.Remove()
 		}
