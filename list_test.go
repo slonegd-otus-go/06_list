@@ -358,11 +358,101 @@ func TestItem_Remove(t *testing.T) {
 			wantBefore: "[1 2 3 4]",
 			wantAfter:  "[1 2 4]",
 		},
+		{
+			name: "remove one",
+			makeList: func() *list.Type {
+				list := &list.Type{}
+				list.PushBack(1)
+				return list
+			},
+			removeAction: func(list *list.Type) {
+				list.First().Remove()
+			},
+			wantBefore: "[1]",
+			wantAfter:  "[]",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			list := tt.makeList()
 			assert.Equal(t, tt.wantBefore, list.String())
+			tt.removeAction(list)
+			assert.Equal(t, tt.wantAfter, list.String())
+		})
+	}
+}
+
+func TestList_RemoveIf(t *testing.T) {
+	var even bool
+	tests := []struct {
+		name         string
+		makeList     func() *list.Type
+		removeAction func(*list.Type)
+		wantBefore   string
+		wantAfter    string
+	}{
+		{
+			name: "remove odd",
+			makeList: func() *list.Type {
+				list := &list.Type{}
+				list.PushBack(1)
+				list.PushBack(2)
+				list.PushBack(3)
+				list.PushBack(4)
+				return list
+			},
+			removeAction: func(list *list.Type) {
+				list.RemoveIf(func(v interface{}) bool {
+					return v.(int)%2 == 1
+				})
+			},
+			wantBefore: "[1 2 3 4]",
+			wantAfter:  "[2 4]",
+		},
+		{
+			name: "remove string",
+			makeList: func() *list.Type {
+				list := &list.Type{}
+				list.PushBack(1)
+				list.PushBack("2")
+				list.PushBack("3")
+				list.PushBack(4)
+				return list
+			},
+			removeAction: func(list *list.Type) {
+				list.RemoveIf(func(v interface{}) bool {
+					_, ok := v.(string)
+					return ok
+				})
+			},
+			wantBefore: "[1 2 3 4]",
+			wantAfter:  "[1 4]",
+		},
+		{
+			name: "remove even index",
+			makeList: func() *list.Type {
+				list := &list.Type{}
+				list.PushBack(2)
+				list.PushBack("6")
+				list.PushBack("4")
+				list.PushBack(2.5)
+				return list
+			},
+			removeAction: func(list *list.Type) {
+				list.RemoveIf(func(v interface{}) bool {
+					defer func() { even = !even }()
+					return even
+				})
+			},
+			wantBefore: "[2 6 4 2.5]",
+			wantAfter:  "[6 2.5]",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			list := tt.makeList()
+			assert.Equal(t, tt.wantBefore, list.String())
+			even = true
 			tt.removeAction(list)
 			assert.Equal(t, tt.wantAfter, list.String())
 		})

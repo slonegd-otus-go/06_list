@@ -57,18 +57,28 @@ func (list Type) Last() *item {
 	return list.last
 }
 
+func (list *Type) RemoveIf(predicate func(value interface{}) bool) {
+	for item := list.first; item.next != nil; item = item.next {
+		if predicate(item.Value) {
+			item.Remove()
+		}
+	}
+}
+
 func (list *Type) String() string {
 	var builder strings.Builder
 	builder.WriteRune('[')
 	item := list.first
-	for ; item.Next() != nil; item = item.Next() {
+	if item != nil {
+		for ; item.next != nil; item = item.next {
+			builder.WriteString(
+				fmt.Sprintf("%v ", item.Value),
+			)
+		}
 		builder.WriteString(
-			fmt.Sprintf("%v ", item.Value),
+			fmt.Sprintf("%v", item.Value),
 		)
 	}
-	builder.WriteString(
-		fmt.Sprintf("%v", item.Value),
-	)
 	builder.WriteRune(']')
 	return builder.String()
 }
@@ -94,6 +104,7 @@ func (item *item) Remove() {
 	if item.next == nil && item.prev == nil {
 		item.list.first = nil
 		item.list.last = nil
+		return
 	}
 
 	if item.list.first == item {
